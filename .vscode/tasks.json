@@ -1,7 +1,13 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "echo-workspace-folder",
+            "type": "shell",
+            "command": "echo ${workspaceFolder}",
+            "problemMatcher": []
+        },
+        {
             "label": "build",
             "type": "shell",
             "command": "make",
@@ -10,14 +16,7 @@
                 "isDefault": true
             },
             "problemMatcher": ["$gcc"],
-            "detail": "Generated task to run make."
-        },
-        {
-            "label": "clean",
-            "type": "shell",
-            "command": "make clean",
-            "problemMatcher": [],
-            "detail": "Generated task to clean up the project."
+            "detail": "Generated task to build with make."
         }
-	]
+    ]
 }
