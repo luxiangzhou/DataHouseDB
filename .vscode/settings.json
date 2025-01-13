@@ -1,0 +1,9 @@
+{
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "d:\\cpp\\workspace\\DataHouseDB\\build",
+            "binaryPath": "d:\\cpp\\workspace\\DataHouseDB\\build\\FileMain",
+            "binaryArgs": []
+        }
+    ]
+}
