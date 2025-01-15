@@ -8,10 +8,10 @@ CXXFLAGS = -Wall -g -std=c++14
 SRCDIR_IO = src/IO
 SRCDIR_CLIENT = src/Client
 
-# 对象文件存放目录
-OBJDIR = obj
 # 最终可执行文件存放目录
 BINDIR = build
+# 对象文件存放目录
+OBJDIR = build/obj
 
 # 可执行文件
 TARGETS = $(BINDIR)/FileMain.exe $(BINDIR)/ShellCommand.exe
@@ -25,43 +25,47 @@ OBJ_FILES_IO = $(patsubst $(SRCDIR_IO)/%.cpp,$(OBJDIR)/%.o,$(SRC_FILES_IO))
 OBJ_FILES_CLIENT = $(patsubst $(SRCDIR_CLIENT)/%.cpp,$(OBJDIR)/%.o,$(SRC_FILES_CLIENT))
 
 #################### 默认目标 ####################
+.PHONY: all clean
 all: $(TARGETS)
 
-#################### 构建规则 ####################
-# 构建规则： FileMain.exe
-$(BINDIR)/FileMain.exe: $(OBJ_FILES_IO)
-	@echo "Linking $@"
-	@if not exist "$(subst /,\\,$(BINDIR))" mkdir "$(subst /,\\,$(BINDIR))"
-	$(CXX) $(LDFLAGS) -o "$@" $^
-
-# 构建规则： ShellCommand.exe
-$(BINDIR)/ShellCommand.exe: $(OBJ_FILES_CLIENT)
-	@echo "Linking $@"
-	@if not exist "$(subst /,\\,$(BINDIR))" mkdir "$(subst /,\\,$(BINDIR))"
-	$(CXX) $(LDFLAGS) -o "$@" $^
-
 #################### 编译规则 ####################
+# 创建build/obj目录
+$(OBJDIR): | $(BINDIR)
+	@echo "create OBJDIR ..."
+	@if not exist "$@" mkdir "$@"
+
 # 编译规则： .cpp 文件到 .o 文件
 $(OBJDIR)/%.o: $(SRCDIR_IO)/%.cpp | $(OBJDIR)
-	@echo "Compiling $<"
-	@if not exist "$(dir $@)" mkdir "$(dir $@)"
+	@echo "execute compiling $< ..."
 	$(CXX) $(CXXFLAGS) -c -o "$@" "$<"
 
 $(OBJDIR)/%.o: $(SRCDIR_CLIENT)/%.cpp | $(OBJDIR)
-	@echo "Compiling $<"
-	@if not exist "$(dir $@)" mkdir "$(dir $@)"
+	@echo "execute compiling $< ..."
 	$(CXX) $(CXXFLAGS) -c -o "$@" "$<"
 
-# 确保对象文件目录存在
-$(OBJDIR):
+#################### 链接规则 ####################
+# 创建build目录 
+$(BINDIR):
+	@echo "create BINDIR ..."
 	@if not exist "$@" mkdir "$@"
+
+# 链接规则： FileMain.exe
+$(BINDIR)/FileMain.exe: $(OBJ_FILES_IO) | $(BINDIR)
+	@echo "execute linking $@ ..."
+	$(CXX) $(LDFLAGS) -o "$@" $^
+
+# 链接规则： ShellCommand.exe
+$(BINDIR)/ShellCommand.exe: $(OBJ_FILES_CLIENT) | $(BINDIR)
+	@echo "execute linking $@ ..."
+	$(CXX) $(LDFLAGS) -o "$@" $^
 
 #################### 清理生成的文件 ####################
 clean:
 ifeq ($(OS),Windows_NT)
-	@powershell -Command "Remove-Item -Recurse -Force -ErrorAction SilentlyContinue '$(subst /,\,$(OBJDIR))' '$(subst /,\,$(BINDIR))'"
+	@echo "execute windows clean ..."
+	@if exist "$(subst /,\,$(OBJDIR))" rmdir /S /Q "$(subst /,\,$(OBJDIR))"
+	@if exist "$(subst /,\,$(BINDIR))" rmdir /S /Q "$(subst /,\,$(BINDIR))"
 else
+	@echo "execute linux clean ..."
 	@rm -rf $(OBJDIR) $(BINDIR)
 endif
-
-.PHONY: all clean

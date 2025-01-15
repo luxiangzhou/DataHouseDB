@@ -22,7 +22,6 @@ int main() {
                 std::cout << line << std::endl;
             }
         }
-
     } catch (const std::exception& e){
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
