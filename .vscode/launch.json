@@ -20,7 +20,7 @@
                     "ignoreFailures": true
                 }
             ],
-            "preLaunchTask": "echo-workspace-folder"
+            "preLaunchTask": "build"
         }
     ]
 }

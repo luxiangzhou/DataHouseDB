@@ -1,0 +1,2 @@
+Makefile需求：src/IO目录下面有FileMain.cpp FileReader.h FileReader.cpp FileWrite.h FileWrite.cpp， src/Client目录下有ShellCommand.cpp，Makefile怎么写,生成2个可执行文件FileMain.exe,ShellCommand.exe到build里面
+
