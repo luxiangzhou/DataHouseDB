@@ -5,6 +5,7 @@
 
 int main() {
     try {
+        cont
         //写入文件
         {
             FileWriter writer("example.txt");
